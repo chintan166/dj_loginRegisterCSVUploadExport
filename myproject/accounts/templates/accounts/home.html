@@ -1,0 +1,69 @@
+<h1>Welcome, {{ user.username }}</h1>
+<a href="{% url 'logout' %}">Logout</a>
+
+
+{% if is_superuser %}
+<h2>Upload CSV Data</h2>
+<form id="csv-upload-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="csv_file" id="csv-file" accept=".csv" required />
+    <button type="submit">Upload CSV</button>
+</form>
+{% endif %}
+<div id="import-status"></div>
+
+<h2>Uploaded Data</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Field 1</th>
+            <th>Field 2</th>
+            <th>Field 3</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in demo_data %}
+        <tr>
+            <td>{{ item.field1 }}</td>
+            <td>{{ item.field2 }}</td>
+            <td>{{ item.field3 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No data available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#csv-upload-form').on('submit', function(e) {
+            e.preventDefault();  // Prevent default form submission
+
+            var formData = new FormData(this);  // Create FormData object with form data
+            $.ajax({
+                url: "{% url 'home' %}",  // Corrected: This now matches the 'home' URL
+                type: "POST",
+                data: formData,
+                processData: false,  // Important for file uploads
+                contentType: false,  // Important for file uploads
+                success: function(response) {
+                    if (response.success) {
+                        $('#import-status').html('<p>Data imported successfully!</p>');
+                        setTimeout(function() {
+                            location.reload();  // Reload the page to show the new data
+                        }, 2000);  // Wait 2 seconds before redirecting
+                    } else {
+                        $('#import-status').html('<p>Error: ' + response.errors + '</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#import-status').html('<p>Error uploading file.</p>');
+                }
+            });
+        });
+    });
+</script>

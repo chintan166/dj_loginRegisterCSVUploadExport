@@ -1,0 +1,43 @@
+<h1>Register (AJAX Example)</h1>
+<form id="register-form" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+<div id="messages"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#register-form').on('submit', function(e) {
+            e.preventDefault();  // Prevent form submission
+
+            // Get form data
+            const formData = $(this).serialize();
+
+            // AJAX POST request
+            $.ajax({
+                url: "{% url 'ajax-register' %}",
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#messages').html('<p style="color: green;">' + response.message + '</p>');
+                        window.location.href = response.redirect_url;
+                        $('#register-form')[0].reset();  // Clear the form
+                    } else {
+                        let errorHtml = '<ul>';
+                        for (const [field, errors] of Object.entries(response.errors)) {
+                            errorHtml += '<li>' + field + ': ' + errors.join(', ') + '</li>';
+                        }
+                        errorHtml += '</ul>';
+                        $('#messages').html('<p style="color: red;">' + errorHtml + '</p>');
+                    }
+                },
+                error: function() {
+                    $('#messages').html('<p style="color: red;">An error occurred. Please try again.</p>');
+                }
+            });
+        });
+    });
+</script>
