@@ -1,3 +1,21 @@
+django-admin startproject myproject
+
+cd myproject/
+
+python3 manage.py startapp accounts
+
+python3 manage.py makemigrations
+
+python3 manage.py migrate
+
+python3 manage.py createsuperuser
+
+python3 manage.py runserver 8096
+
+
+
+-------------------------------------------------------------------------------
+
 ****in this repo you can find below concepts
 
 user registration with ajax
@@ -13,6 +31,16 @@ logout functionality
 in admin grid you can download csv file****
 
 ------------------------------------------------------------------------------------------------
+demo csv file
+
+field1,field2,field3
+Value1,Value2,Value3
+Value4,Value5,Value6
+
+
+
+
+---------------------------------------------------------------------------------------
 **Normal user registration**
 
 ![image](https://github.com/user-attachments/assets/be6c5d8c-4d84-44d1-9438-41edaea8ecaa)
@@ -31,8 +59,8 @@ in admin grid you can download csv file****
 ![image](https://github.com/user-attachments/assets/3d4679bc-232c-4325-9297-829304a0e084)
 
 **Export admin grid**
-![image](https://github.com/user-attachments/assets/8373a226-eaa2-4d66-b3fe-c1dc9c5ff22b)
 
+![Screenshot from 2024-12-28 17-01-18](https://github.com/user-attachments/assets/e354b6a1-b1bb-4594-adfd-eef1371142e2)
 
 
 
